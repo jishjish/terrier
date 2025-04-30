@@ -1,5 +1,3 @@
-// use std::path::Path;
-// use std::ffi::OsStr;
 use std::path::PathBuf;
 use owo_colors::OwoColorize;
 
@@ -8,9 +6,11 @@ const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
 
 /// Takes arg of filename, extracts extension and checks if file type is supported.
 pub fn get_extension_from_filename(filename: PathBuf) -> Option<String> {
-
     if filename.exists() {
+        // Extract the extension from filename
         let extension = filename.extension()?;
+
+        // Convert extension to string 
         let ext_str = extension.to_string_lossy().to_string();
 
         if SUPPORTED_TYPES.contains(&ext_str.as_str()) {
@@ -19,12 +19,9 @@ pub fn get_extension_from_filename(filename: PathBuf) -> Option<String> {
             println!("File type not supported. Must be one of {:?}", SUPPORTED_TYPES);
             None
         }
-
     } else {
         panic!("File not found at: {:?}", filename.red());
-        
     }
-
 }
 
 
