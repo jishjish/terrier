@@ -1,5 +1,6 @@
 // outside imports
 use clap::Parser;
+use owo_colors::OwoColorize;
 
 // mods
 mod args;
@@ -10,13 +11,12 @@ use args::Cli;
 use utils::get_extension_from_filename;
 
 
-
 fn main() {
     let args: Cli = Cli::parse();
-    println!("Searching file: {:?}", args.path);
-    println!("Keyword searching: {}", args.keyword);
+    println!("{}: {:?}", "Searching file".green(), args.paths);
+    println!("{}: {:?}", "Searching for".green(), args.keyword);
 
-    get_extension_from_filename(&args.path);
+    get_extension_from_filename(args.paths);
 
 }
 
