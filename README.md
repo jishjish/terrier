@@ -1,0 +1,1 @@
+CLI grep implementation in Rust, will support function trees / locations based on file type.
