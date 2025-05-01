@@ -1,6 +1,10 @@
+# Terrier
+
 Unwieldy code base? Get to know your code better with Terrier.
 
-`Grep search for keywords` cargo run -- grep -p "src/main.rs" -k searching
-`Function tree analysis`   cargo run -- tree -p "src/main.rs"
+## Quick Commands
 
-`Note` After install replace cargo run with terrier
+- **Grep search for keywords**: `cargo run -- grep -p "src/main.rs" -k searching`
+- **Function tree analysis**: `cargo run -- tree -p "src/main.rs"`
+
+**Note**: After installation, replace `cargo run` with `terrier`
