@@ -2,22 +2,28 @@ use std::path::PathBuf;
 use clap::Parser;
 
 #[derive(Debug, Parser)]
-#[clap(author, version, about)]
 pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
 
-    // /// The file path you want to grep search.
-    // #[arg(short, long)]
-    // pub path: String,
+#[derive(Debug, Parser)]
+pub enum Commands {
+    Grep(GrepArgs),
+    Tree(TreeArgs),
+}
 
-    /// Files or directories to search
-    #[arg(short = 'p', long, value_name = "PATH")]
+#[derive(Debug, Parser)]
+pub struct GrepArgs {
+    #[arg(short = 'p', long)]
     pub paths: PathBuf,
-
-    /// The keyword to search for.
+    
     #[arg(short = 'k', long)]
     pub keyword: String,
+}
 
-    // /// Optional flag to print file tree 
-    // #[arg(short, long, default_value_t = false)]
-    // tree: bool,
+#[derive(Debug, Parser)]
+pub struct TreeArgs {
+    #[arg(short = 'p', long)]
+    pub paths: PathBuf,
 }

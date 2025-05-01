@@ -5,6 +5,9 @@ use fuzzy_matcher::FuzzyMatcher;
 use fuzzy_matcher::skim::SkimMatcherV2;
 
 
+/* Grep Based - functions
+   supporting grep commands */
+
 // Supported file types to search in path
 const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
 
@@ -50,6 +53,31 @@ pub fn search_file_for_keyword(keyword: String, filename: &PathBuf) -> Option<St
     println!("│  - Matches: {:<24}   │", count.to_string().green());
     println!("│  - Match density(%): {:<18.2}│", (count as f64 / contents.lines().count() as f64) * 100.0);
     println!("└────────────────────────────────────────┘");
+
+    None
+}
+
+
+
+
+/* Tree Based - functions
+   supporting grep commands */
+
+pub fn build_function_tree(filename: &PathBuf) -> Option<String> {
+    let ext = get_extension_from_filename(filename)?;
+    println!("ext is {:?}", ext);
+
+    match ext.as_str() {
+        "rs" => {
+            println!("this is a rust file")
+        },
+        "py" => {
+            println!("this is a python file")
+        },
+        _ => {
+            println!("unknown file type")
+        }
+    }
 
     None
 }

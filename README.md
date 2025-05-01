@@ -2,6 +2,7 @@ CLI grep implementation in Rust, will support function trees / locations based o
 
 
 `Example`
-cargo run -- --paths "aaa.rs" --keyword foo
+
+cargo run -- grep -p "src/main.rs" -k searching
 
 After install replace cargo run with terrier
