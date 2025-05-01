@@ -45,7 +45,7 @@ pub fn search_file_for_keyword(keyword: String, filename: &PathBuf) -> Option<St
             println!("Line {} in {:?}: {}", i+1, filename, line.blue());
         }
     }
-    println!("┌──────── Summary: {:?} ────────┐", filename.red());
+    println!("┌──────── Summary: {:?} ────────────┐", filename.file_name().unwrap().red());
     println!("│  - Total lines: {:<20}   │", contents.lines().count());
     println!("│  - Matches: {:<24}   │", count.to_string().green());
     println!("│  - Match density(%): {:<18.2}│", (count as f64 / contents.lines().count() as f64) * 100.0);
