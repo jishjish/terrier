@@ -4,7 +4,6 @@
         - Rust (rs), Python (py), etc. */
 
 use std::fs;
-use std::collections::HashMap;
 use std::path::PathBuf;
 use owo_colors::OwoColorize;
 use crate::utils::get_extension_from_filename;  // internal fn from utils
@@ -16,20 +15,16 @@ pub fn func_identification(filename: &PathBuf) -> Option<String> {
     let contents = fs::read_to_string(filename)
         .expect("Unable to read file.");
 
-    // let func_declarations: HashMap<&str, &str> = HashMap::from([
-    //     ("rs", "fn"),
-    //     ("py", "def")
-    // ]);
 
     let func_name: Option<&str> = match ext.as_str() {
+        // check for rust
         "rs" => {
             println!("{}", "Parsing Rust file...".green());
-            // Some(func_declarations.get("rs")?)
             Some("fn")
         },
+        // check for python
         "py" => {
             println!("{}", "Parsing Python file...".green());
-            // Some(func_declarations.get("py")?)
             Some("def")
         },
         _ => {

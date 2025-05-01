@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use owo_colors::OwoColorize;
 
 // Supported file types to search in path
-const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
+pub const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
 
 /// Takes arg of filename, extracts extension and checks if file type is supported.
 pub fn get_extension_from_filename(filename: &PathBuf) -> Option<String> {

@@ -31,18 +31,20 @@ fn main() {
         Commands::Grep(args) => {
             println!("{}: {:?}", "Searching file".green(), &args.paths);
             println!("{}: {:?}", "Searching for".green(), &args.keyword);
-            get_extension_from_filename(&args.paths);                       // extract the file extension
-            search_file_for_keyword(args.keyword, &args.paths);   // search keyword
+            // Extract the file extension
+            get_extension_from_filename(&args.paths);                            
+            // Search file for keyword
+            search_file_for_keyword(args.keyword, &args.paths);        
         },
         Commands::Func(args) => {
             println!("{}: {:?}", "Finding functions in".green(), &args.paths);
             // Get extension is called inside of build function func 
             // Call func identifier
-            func_identification(&args.paths);
+            func_identification(&args.paths);                         
         },
         Commands::Link(args) => {
-            println!("jjj");
-            link_func_search(&args.paths);
+            // Call func link identifier
+            link_func_search(&args.paths);                            
         }
     }
 }
