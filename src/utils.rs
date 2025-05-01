@@ -65,19 +65,28 @@ pub fn search_file_for_keyword(keyword: String, filename: &PathBuf) -> Option<St
 
 pub fn build_function_tree(filename: &PathBuf) -> Option<String> {
     let ext = get_extension_from_filename(filename)?;
-    println!("ext is {:?}", ext);
+    let contents = fs::read_to_string(filename)
+        .expect("Unable to read file.");
 
+    // match function based on file type
     match ext.as_str() {
         "rs" => {
-            println!("this is a rust file")
+            println!("{}", "Parsing Rust file...".green());
+            let mut count = 0;
+            for (i, line) in contents.lines().enumerate() {
+                if line.contains("fn") {
+                    count += 1;
+                    println!("Line {} in {:?}: {}", i+1, filename, line.blue());
+                    println!("{}", count);
+                }
+            }
         },
         "py" => {
-            println!("this is a python file")
+            println!("{}", "Parsing Python file...".green());
         },
         _ => {
             println!("unknown file type")
         }
     }
-
     None
 }

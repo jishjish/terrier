@@ -1,8 +1,6 @@
-CLI grep implementation in Rust, will support function trees / locations based on file type.
+Unwieldy code base? Get to know your code better with Terrier.
 
+`Grep search for keywords` cargo run -- grep -p "src/main.rs" -k searching
+`Function tree analysis`   cargo run -- tree -p "src/main.rs"
 
-`Example`
-
-cargo run -- grep -p "src/main.rs" -k searching
-
-After install replace cargo run with terrier
+`Note` After install replace cargo run with terrier
