@@ -11,6 +11,7 @@ pub struct Cli {
 pub enum Commands {
     Grep(GrepArgs),
     Func(FuncArgs),
+    Link(LinkArgs)
     // Tree(TreeArgs),
 }
 
@@ -25,6 +26,12 @@ pub struct GrepArgs {
 
 #[derive(Debug, Parser)]
 pub struct FuncArgs {
+    #[arg(short = 'p', long)]
+    pub paths: PathBuf,
+}
+
+#[derive(Debug, Parser)]
+pub struct LinkArgs {
     #[arg(short = 'p', long)]
     pub paths: PathBuf,
 }

@@ -4,32 +4,33 @@
         - Rust (rs), Python (py), etc. */
 
 use std::fs;
-use std::collections;
+use std::collections::HashMap;
 use std::path::PathBuf;
 use owo_colors::OwoColorize;
 use crate::utils::get_extension_from_filename;  // internal fn from utils
 
 
-// from given filename, extract all functions and
+// from given filename, extract all functions and return summary
 pub fn func_identification(filename: &PathBuf) -> Option<String> {
     let ext = get_extension_from_filename(filename)?;
     let contents = fs::read_to_string(filename)
         .expect("Unable to read file.");
 
-    let func_declarations = collections::HashMap::from([
-        ("rs", "fn"),
-        ("py", "def")
-    ]);
-
+    // let func_declarations: HashMap<&str, &str> = HashMap::from([
+    //     ("rs", "fn"),
+    //     ("py", "def")
+    // ]);
 
     let func_name: Option<&str> = match ext.as_str() {
         "rs" => {
             println!("{}", "Parsing Rust file...".green());
-            Some(func_declarations.get("rs")?)
+            // Some(func_declarations.get("rs")?)
+            Some("fn")
         },
         "py" => {
             println!("{}", "Parsing Python file...".green());
-            Some(func_declarations.get("py")?)
+            // Some(func_declarations.get("py")?)
+            Some("def")
         },
         _ => {
             println!("Unsupported file type.");
@@ -37,54 +38,27 @@ pub fn func_identification(filename: &PathBuf) -> Option<String> {
         }
     };
 
-    println!("func name is {:?}", func_name.unwrap().to_string());
-
-    let mut count = 0;
+    let mut count: i32 = 0;
     for (i, line) in contents.lines().enumerate() {
-        if line.contains("fn") {
+        if line.contains(&func_name.unwrap().to_string()) {
             count += 1;
             println!("Line {}:      {}", i+1, line.blue());
         }
     }
+
     println!("┌──────── Summary: {:?} ────────────┐", filename.file_name().unwrap().red());
     println!("│  - Total lines: {:<20}   │", contents.lines().count().green());
     println!("│  - Functions: {:<24} │", count.to_string().green());
     println!("└────────────────────────────────────────┘");
 
-    // // match function based on file type
-    // match ext.as_str() {
-    //     "rs" => {
-    //         println!("{}", "Parsing Rust file...".green());
-    //         let mut count = 0;
-    //         for (i, line) in contents.lines().enumerate() {
-    //             if line.contains("fn") {
-    //                 count += 1;
-    //                 println!("Line {}:      {}", i+1, line.blue());
-    //             }
-    //         }
-    //         println!("┌──────── Summary: {:?} ────────────┐", filename.file_name().unwrap().red());
-    //         println!("│  - Total lines: {:<20}   │", contents.lines().count().green());
-    //         println!("│  - Functions: {:<24} │", count.to_string().green());
-    //         println!("└────────────────────────────────────────┘");
-        
-    //     },
-    //     "py" => {
-    //         println!("{}", "Parsing Python file...".green());
-    //         let mut count = 0;
-    //         for (i, line) in contents.lines().enumerate() {
-    //             if line.contains("def") {
-    //                 count += 1;
-    //                 println!("Line {}:      {}", i+1, line.blue());
-    //             }
-    //         }
-    //         println!("┌──────── Summary: {:?} ────────────┐", filename.file_name().unwrap().red());
-    //         println!("│  - Total lines: {:<20}   │", contents.lines().count().green());
-    //         println!("│  - Functions: {:<24} │", count.to_string().green());
-    //         println!("└────────────────────────────────────────┘");
-    //     },
-    //     _ => {
-    //         println!("Unsupported file type")
-    //     }
-    // }
     None
 }
+
+
+
+
+
+
+
+
+

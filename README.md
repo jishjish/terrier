@@ -9,4 +9,4 @@ Unwieldy code base? Get to know your code better with Terrier.
 
 **Note**: After installation, replace `cargo run` with `terrier`
 
-**Note**:  Supported file types: `Rust`, `Python`.
+**Note**: Supported file types: `Rust`, `Python`.

@@ -6,11 +6,11 @@ use fuzzy_matcher::skim::SkimMatcherV2;
 
 
 pub fn search_file_for_keyword(keyword: String, filename: &PathBuf) -> Option<String> {
-    let contents = fs::read_to_string(filename)
+    let contents: String = fs::read_to_string(filename)
         .expect("Unable to read file.");
 
-    let mut count = 0;
-    let matcher = SkimMatcherV2::default();
+    let mut count: i32 = 0;
+    let matcher: SkimMatcherV2 = SkimMatcherV2::default();
 
     for (i, line) in contents.lines().enumerate() {
         // Normalize line and keyword to lowercase for case 
