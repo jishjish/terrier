@@ -10,11 +10,11 @@ pub struct Cli {
     // pub path: String,
 
     /// Files or directories to search
-    #[arg(short, long, value_name = "PATH")]
+    #[arg(short = 'p', long, value_name = "PATH")]
     pub paths: PathBuf,
 
     /// The keyword to search for.
-    #[arg(short, long)]
+    #[arg(short = 'k', long)]
     pub keyword: String,
 
     // /// Optional flag to print file tree 

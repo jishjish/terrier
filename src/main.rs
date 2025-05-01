@@ -14,8 +14,11 @@ use utils::search_file_for_keyword;
 
 fn main() {
     let args: Cli = Cli::parse();
+
+    println!("************************************************");
     println!("{}: {:?}", "Searching file".green(), &args.paths);
     println!("{}: {:?}", "Searching for".green(), &args.keyword);
+    println!("************************************************");
 
     get_extension_from_filename(&args.paths);
     search_file_for_keyword(args.keyword, &args.paths);

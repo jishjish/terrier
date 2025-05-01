@@ -5,4 +5,5 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.37", features = ["derive"] }
+fuzzy-matcher = "0.3.7"
 owo-colors = "4.2.0"
