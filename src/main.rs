@@ -1,23 +1,23 @@
-// outside imports
+// external imports
 use clap::Parser;
 use owo_colors::OwoColorize;
 
 // mods
 mod args;
 mod utils;
+mod grep;
+mod func;
 
 // import Cli args from args.rs
 use args::Cli;
 use crate::args::Commands;
 use utils::get_extension_from_filename;
 
-// Grep
-use utils::search_file_for_keyword;
+// Grep (grep.rs)
+use grep::search_file_for_keyword;
 
-// Tree
-use utils::build_function_tree;
-
-
+// Func (func.rs)
+use func::func_identification;
 
 
 fn main() {
@@ -34,13 +34,13 @@ fn main() {
             // Search the file for keyword
             search_file_for_keyword(args.keyword, &args.paths);
         },
-        Commands::Tree(args) => {
-            println!("************************************************");
-            println!("{}: {:?}", "Building tree for".green(), &args.paths);
-            println!("************************************************");
-            // Extension is called inside of build function tree
-            // Call tree function builder
-            build_function_tree(&args.paths);
+        Commands::Func(args) => {
+            // println!("************************************************");
+            println!("{}: {:?}", "Finding functions in".green(), &args.paths);
+            // println!("************************************************");
+            // Extension is called inside of build function func 
+            // Call func identifier
+            func_identification(&args.paths);
         }
     }
 }

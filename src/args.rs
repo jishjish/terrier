@@ -10,7 +10,8 @@ pub struct Cli {
 #[derive(Debug, Parser)]
 pub enum Commands {
     Grep(GrepArgs),
-    Tree(TreeArgs),
+    Func(FuncArgs),
+    // Tree(TreeArgs),
 }
 
 #[derive(Debug, Parser)]
@@ -23,7 +24,14 @@ pub struct GrepArgs {
 }
 
 #[derive(Debug, Parser)]
-pub struct TreeArgs {
+pub struct FuncArgs {
     #[arg(short = 'p', long)]
     pub paths: PathBuf,
 }
+
+
+// #[derive(Debug, Parser)]
+// pub struct TreeArgs {
+//     #[arg(short = 'p', long)]
+//     pub paths: PathBuf,
+// }
