@@ -21,10 +21,10 @@ use grep::search_file_for_keyword;
 use func::func_identification;
 
 // Link (link.rs)
-use link::link_func_search;
+// use link::link_func_search;
+use link::CodeLinkAnalyzer;
 
-
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>>{
     let cli: Cli = Cli::parse();
     
     match cli.command {
@@ -44,9 +44,22 @@ fn main() {
         },
         Commands::Link(args) => {
             // Call func link identifier
-            link_func_search(&args.paths);                            
+            // link_func_search(&args.paths);                            
+            let mut analyzer = CodeLinkAnalyzer::new();
+            analyzer.file_content_extractor(&args.paths)?;
+            analyzer.function_extractor()?;
+            // analyzer.test()?;
+            // println!("Found {} files", analyzer.file_contents.len());
         }
     }
+    Ok(())
 }
 
 
+
+// fn main() -> Result<(), Box<dyn std::error::Error>> {
+//     let mut analyzer = CodeLinkAnalyzer::new();
+//     analyzer.test()?;
+//     println!("Found {} files", analyzer.file_contents.len());
+//     Ok(())
+// }
