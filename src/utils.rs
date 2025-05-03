@@ -1,6 +1,20 @@
 use std::path::PathBuf;
 use owo_colors::OwoColorize;
 
+// Files to ignore
+pub const EXCLUDED_DIRECTORIES: &[&str] = &[
+    "venv",
+    "env", 
+    "uv.lock",
+    "node_modules", 
+    "__pycache__",
+    "site-packages",
+    "dist",
+    "build",
+    "target",
+    ".git"
+];
+
 // Supported file types to search in path
 pub const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
 

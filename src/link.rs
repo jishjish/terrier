@@ -2,61 +2,15 @@ use std::fs;
 use regex::Regex;
 use walkdir::WalkDir;
 use std::path::PathBuf;
+// use owo_colors::OwoColorize;
 use std::collections::HashMap;
 // Internal imports
-use crate::utils::SUPPORTED_TYPES;
+use crate::utils:: { EXCLUDED_DIRECTORIES, SUPPORTED_TYPES};
 
-
-// /// Iteration over directory, extract file and code.
-// fn file_content_extractor(filename: &PathBuf) -> HashMap<std::string::String, std::string::String> {
-
-//     // Set hashmap for file name and contents
-//     let mut map: HashMap<String, String> = HashMap::new();
-
-//     for entry in WalkDir::new(filename) {
-//         let entry = entry.unwrap();
-
-//         if entry.file_type().is_file() {
-//             println!("file: {:?}", entry);
-
-//             let file_path = entry.path();
-
-//             let extension = file_path.extension().unwrap();
-//             let ext_type = extension.to_string_lossy().to_string();
-
-//             if SUPPORTED_TYPES.contains(&ext_type.as_str()) {
-//                 let contents: String = fs::read_to_string(file_path)
-//                     .expect("Unable to read file.");
-//                 map.insert(entry.file_name().to_string_lossy().to_string(), contents);
-//             }
-//         }
-//     }
-//     // Return map
-//     map 
-// }
-
-
-
-// fn function_extractor(file_contents: HashMap<String, String>) {
-
-// } 
-
-
-
-// pub fn link_func_search(filename: &PathBuf) {
-//     let contents: HashMap<String, String> = file_content_extractor(filename);
-
-//     // function_extractor(contents);
-
-// }
-
-
-
-// -------
 
 pub struct CodeLinkAnalyzer {
-    pub file_contents: HashMap<String, String>,
-    pub extracted_functions: HashMap<String, String>
+    pub file_contents: HashMap<String, (String, String)>,
+    pub extracted_functions: HashMap<String, Vec<String>>
 }
 
 impl CodeLinkAnalyzer {
@@ -68,45 +22,62 @@ impl CodeLinkAnalyzer {
         }
     }
 
-    // Iterate through directory, extract supported file types and their contents, store in hashmap
+    /// Iterate through directory, extract supported file types and their contents, store in hashmap
     pub fn file_content_extractor(&mut self, filename: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
-        for entry in WalkDir::new(filename) {
-            let entry = entry.unwrap();
-    
+        let walker = WalkDir::new(filename).into_iter();
+
+        let filtered = walker.filter_entry(|e| {
+            let name = e.file_name().to_string_lossy();
+            !(EXCLUDED_DIRECTORIES.contains(&name.as_ref()) || name.starts_with("."))
+        });
+
+        for entry in filtered {
+            let entry = entry?;
+            // Only process files 
             if entry.file_type().is_file() {
-                let file_path = entry.path();
-                let extension = file_path.extension().unwrap();
-                let ext_type = extension.to_string_lossy().to_string();
-    
-                if SUPPORTED_TYPES.contains(&ext_type.as_str()) {
-                    let contents: String = fs::read_to_string(file_path)
-                        .expect("Unable to read file.");
-                    // Insert into file_contents struct
-                    self.file_contents.insert(entry.file_name().to_string_lossy().to_string(), contents);
+                // println!("entry is: {:?}", entry);
+                if entry.file_type().is_file() {
+                    let file_path = entry.path();
+                    let ext_type = file_path.extension()
+                        .map_or(String::from(""), |ext| ext.to_string_lossy().to_string());
+                    
+                    if SUPPORTED_TYPES.contains(&&ext_type.as_str()) {
+                        let contents: String = fs::read_to_string(file_path)
+                            .expect("Unable to read file");
+                        self.file_contents.insert(entry.file_name().to_string_lossy().to_string(), (ext_type, contents));
+                    }
                 }
+
             }
         }
         Ok(())
     }
 
+    /// Search through file contents and extract functions. Store in extracted_functions
     pub fn function_extractor(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        
+        // Set regex patterns for different file types
         let python_re = Regex::new(r"def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)").unwrap();
         let rust_re = Regex::new(r"fn\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)").unwrap();
 
         for (key, value) in &self.file_contents {
-            println!("key is: {}", key);
-            println!("value is: {}", value);
+            let re = match value.0.as_str() {
+                "py" => Some(&python_re),
+                "rs" => Some(&rust_re),
+                _ => None
+            };
+
+            for (_i, matched) in re.unwrap().find_iter(&value.1).enumerate() {
+                let matched_function = matched.as_str();
+                // Check if key exists, otherwise push to new key in extracted_functions
+                self.extracted_functions.entry(key.to_string())
+                    .or_insert_with(Vec::new)
+                    .push(matched_function.to_string());
+            }
         }
+        println!("res: {:#?}", self.extracted_functions);
         Ok(())
     }
 
-    pub fn test(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        let mut path = PathBuf::new();
-        // path.push(r"/Users/me/Desktop/rust/aaa/src");
-        path.push("/Users/joshphillips/Desktop/rust/terrier/src");
-        self.file_content_extractor(&path)
-    }
 }
 
 
