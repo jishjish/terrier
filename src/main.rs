@@ -48,18 +48,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
             let mut analyzer = CodeLinkAnalyzer::new();
             analyzer.file_content_extractor(&args.paths)?;
             analyzer.function_extractor()?;
+            analyzer.overlaps();
             // analyzer.test()?;
             // println!("Found {} files", analyzer.file_contents.len());
         }
     }
     Ok(())
 }
-
-
-
-// fn main() -> Result<(), Box<dyn std::error::Error>> {
-//     let mut analyzer = CodeLinkAnalyzer::new();
-//     analyzer.test()?;
-//     println!("Found {} files", analyzer.file_contents.len());
-//     Ok(())
-// }
