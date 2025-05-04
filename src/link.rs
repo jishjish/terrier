@@ -4,13 +4,22 @@ use walkdir::WalkDir;
 use std::path::PathBuf;
 use owo_colors::OwoColorize;
 use std::collections::HashMap;
+
+use petgraph::graph::node_index as n;
+use petgraph::prelude::*;
+use petgraph::visit::depth_first_search;
+use petgraph::visit::{DfsEvent, Time};
+use petgraph::dot::{Dot, Config};
+
+
 // Internal imports
 use crate::utils:: { EXCLUDED_DIRECTORIES, SUPPORTED_TYPES};
 
 
 pub struct CodeLinkAnalyzer {
-    pub file_contents: HashMap<String, (String, String)>,     // file path, (file type, file contents)
-    pub extracted_functions: HashMap<String, Vec<String>>     // file path, [functions]
+    pub file_contents: HashMap<String, (String, String)>,      // file path, (file type, file contents)
+    pub extracted_functions: HashMap<String, Vec<String>>,     // file path, [functions]
+    pub call_graph: HashMap<String, Vec<String>>               // file::function name [files where referenced]
 }
 
 impl CodeLinkAnalyzer {
@@ -19,6 +28,7 @@ impl CodeLinkAnalyzer {
         Self {
             file_contents: HashMap::new(),
             extracted_functions: HashMap::new(),
+            call_graph: HashMap::new(),
         }
     }
 
@@ -81,12 +91,13 @@ impl CodeLinkAnalyzer {
     }
 
 
-    pub fn overlaps(&mut self) -> HashMap<String, Vec<String>> {
+    pub fn overlaps(&mut self) -> Result<(), Box<dyn std::error::Error>> {
 
-        let mut call_graph = HashMap::new();
+        // Hash map of 
+        // let mut call_graph: HashMap<String, Vec<String>> = HashMap::new();
 
         // Start for loop on file_contents
-        for (file_path, (file_type, content)) in &self.file_contents {
+        for (file_path, (_file_type, content)) in &self.file_contents {
             // Inner loop over extracted_functions
             for (file, functions) in &self.extracted_functions {
                 // Loop over functions in extracted_functions vec
@@ -97,8 +108,10 @@ impl CodeLinkAnalyzer {
                     if let Ok(re) = Regex::new(&pattern) {
                         if re.is_match(content) {
                             let key = format!("{}::{}", file, func);
-                            let entry = call_graph.entry(key).or_insert_with(Vec::new);
-                            entry.push(file_path.clone());
+                            // Push data to call graph struct
+                            self.call_graph.entry(key)
+                                .or_insert_with(Vec::new)
+                                .push(file_path.to_string());
                         }
                     }
                 }
@@ -106,10 +119,17 @@ impl CodeLinkAnalyzer {
 
         };
         // Ok(())
-        println!("call graph {:#?}", call_graph);
-        call_graph
+        println!("call graph {:#?}", &self.call_graph);
+        // println!("{:?}", call_graph.keys());
+        Ok(())
+    }
+
+
+    pub fn link_builder(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+        
+        // Set node edges to be keys in call graph
+        Ok(())
     }
 
 }
-
 

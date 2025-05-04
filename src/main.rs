@@ -27,6 +27,7 @@ use link::CodeLinkAnalyzer;
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let cli: Cli = Cli::parse();
     
+    
     match cli.command {
         Commands::Grep(args) => {
             println!("{}: {:?}", "Searching file".green(), &args.paths);
@@ -45,10 +46,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
         Commands::Link(args) => {
             // Call func link identifier
             // link_func_search(&args.paths);                            
+
             let mut analyzer = CodeLinkAnalyzer::new();
             analyzer.file_content_extractor(&args.paths)?;
             analyzer.function_extractor()?;
             analyzer.overlaps();
+            analyzer.link_builder()?;
             // analyzer.test()?;
             // println!("Found {} files", analyzer.file_contents.len());
         }
