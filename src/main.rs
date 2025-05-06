@@ -43,9 +43,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
             func_identification(&args.paths);                         
         },
         Commands::Link(args) => {
-            // Call func link identifier
-
+            // Instantiate new analyzer
             let mut analyzer = CodeLinkAnalyzer::new();
+            // Set args as path
             analyzer.file_content_extractor(&args.paths)?;
             analyzer.function_extractor()?;
             analyzer.overlaps()?;
