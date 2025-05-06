@@ -1,6 +1,8 @@
 # Terrier
 
-Unwieldy code base? Get to know your code better with Terrier.
+Have you or someone you know been effected by vibe coding? A great idea that turned into an unweildy code base after one too many "make it better" prompts?
+Well you are not entitled to compensation, but you mak get to know your project better with the help of Terrier.
+Understand the structure, functions, and sources of your repo through our straightforward CLI.
 
 ## Quick Commands `cargo run`
 

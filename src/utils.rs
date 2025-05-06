@@ -30,8 +30,8 @@ pub fn get_extension_from_filename(filename: &PathBuf) -> Option<String> {
         if SUPPORTED_TYPES.contains(&ext_str.as_str()) {
             Some(ext_str)
         } else {
-            println!("File type not supported. Must be one of {:?}", SUPPORTED_TYPES);
-            None
+            panic!("File type not supported. Must be one of {:?}", SUPPORTED_TYPES);
+            // None
         }
     } else {
         panic!("File not found at: {:?}", filename.red());

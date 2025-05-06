@@ -25,7 +25,6 @@ pub fn func_identification(filename: &PathBuf) -> Option<String> {
     let contents = fs::read_to_string(filename)
         .expect("Unable to read file.");
 
-
     let func_name: Option<&str> = match ext.as_str() {
         // check for rust
         "rs" => {
@@ -37,8 +36,13 @@ pub fn func_identification(filename: &PathBuf) -> Option<String> {
             println!("{}", "Parsing Python file...".green());
             Some("def")
         },
-        _ => {
-            println!("Unsupported file type.");
+        "js" => {
+            println!("{}", "Parsing Javascript file".green());
+            Some("function")
+        }
+        unsupported => {
+            // println!("Unsupported file type.");
+            assert!(false, "Unsupported file type: {}", unsupported);
             None
         }
     };
