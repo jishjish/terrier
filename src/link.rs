@@ -109,7 +109,7 @@ impl CodeLinkAnalyzer {
                 }
             }
         };
-        println!("call graph {:#?}", &self.call_graph);
+        // println!("call graph {:#?}", &self.call_graph);
         Ok(())
     }
 
