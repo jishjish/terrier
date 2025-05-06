@@ -65,12 +65,17 @@ impl CodeLinkAnalyzer {
         // Set regex patterns for different file types
         let python_re = Regex::new(r"def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)").unwrap();
         let rust_re = Regex::new(r"fn\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)").unwrap();
+        let javascript_re = Regex::new(r"function\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)").unwrap();
 
         for (key, value) in &self.file_contents {
             let re = match value.0.as_str() {
                 "py" => Some(&python_re),
                 "rs" => Some(&rust_re),
-                _ => None
+                "js" => Some(&javascript_re),
+                unsupported => {
+                    assert!(false, "Unsupported file type: {}", unsupported);
+                    None
+                }
             };
 
             // Iterate through, push HashMap<file path, (file type, contents)>

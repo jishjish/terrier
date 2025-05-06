@@ -16,7 +16,7 @@ pub const EXCLUDED_DIRECTORIES: &[&str] = &[
 ];
 
 // Supported file types to search in path
-pub const SUPPORTED_TYPES: &[&str] = &["py", "rs"];
+pub const SUPPORTED_TYPES: &[&str] = &["py", "rs", "js"];
 
 /// Takes arg of filename, extracts extension and checks if file type is supported.
 pub fn get_extension_from_filename(filename: &PathBuf) -> Option<String> {
