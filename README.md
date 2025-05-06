@@ -4,8 +4,8 @@ Have you or someone you know been effected by vibe coding? A great idea that tur
 Well you are not entitled to compensation, but you mak get to know your project better with the help of Terrier.
 Understand the structure, functions, and sources of your repo through our straightforward CLI.
 
-**Note**: After installation, replace `cargo run` with `terrier`
-**Note**: Supported file types: `Rust`, `Python`, `Javascript`.
+- **Note**: After installation, replace `cargo run` with `terrier`
+- **Note**: Supported file types: `Rust`, `Python`, `Javascript`.
 
 
 ## Quick Commands `cargo run`
