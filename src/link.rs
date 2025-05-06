@@ -2,24 +2,20 @@ use std::fs;
 use regex::Regex;
 use walkdir::WalkDir;
 use std::path::PathBuf;
-use owo_colors::OwoColorize;
-use std::collections::HashMap;
-
-use petgraph::graph::node_index as n;
-use petgraph::prelude::*;
-use petgraph::visit::depth_first_search;
-use petgraph::visit::{DfsEvent, Time};
-use petgraph::dot::{Dot, Config};
+// use owo_colors::OwoColorize;
+use std::collections::{BTreeMap, HashMap};
+use tabled::{builder::Builder, settings::Style};
+use tabled::settings::{Color, object::Rows};
 
 
-// Internal imports
+// Internal imports for dir to exclude / supported file types
 use crate::utils:: { EXCLUDED_DIRECTORIES, SUPPORTED_TYPES};
 
 
 pub struct CodeLinkAnalyzer {
     pub file_contents: HashMap<String, (String, String)>,      // file path, (file type, file contents)
     pub extracted_functions: HashMap<String, Vec<String>>,     // file path, [functions]
-    pub call_graph: HashMap<String, Vec<String>>               // file::function name [files where referenced]
+    call_graph: BTreeMap<String, Vec<String>>,                 // file::function name [files where referenced]
 }
 
 impl CodeLinkAnalyzer {
@@ -28,7 +24,7 @@ impl CodeLinkAnalyzer {
         Self {
             file_contents: HashMap::new(),
             extracted_functions: HashMap::new(),
-            call_graph: HashMap::new(),
+            call_graph: BTreeMap::new(),
         }
     }
 
@@ -90,11 +86,8 @@ impl CodeLinkAnalyzer {
         Ok(())
     }
 
-
+    /// Establish where functions overlap in other files.
     pub fn overlaps(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-
-        // Hash map of 
-        // let mut call_graph: HashMap<String, Vec<String>> = HashMap::new();
 
         // Start for loop on file_contents
         for (file_path, (_file_type, content)) in &self.file_contents {
@@ -102,7 +95,6 @@ impl CodeLinkAnalyzer {
             for (file, functions) in &self.extracted_functions {
                 // Loop over functions in extracted_functions vec
                 for func in functions {
-                    // let pattern = format!(r"\b{}\s*\(", regex::escape(func));
                     let pattern = format!(r"{}[\s\(]", regex::escape(func));
 
                     if let Ok(re) = Regex::new(&pattern) {
@@ -116,18 +108,44 @@ impl CodeLinkAnalyzer {
                     }
                 }
             }
-
         };
-        // Ok(())
         println!("call graph {:#?}", &self.call_graph);
-        // println!("{:?}", call_graph.keys());
         Ok(())
     }
 
 
     pub fn link_builder(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+
+        let mut builder = Builder::new();
+    
+        // Add header row 
+        builder.push_record(["Source File", "Function Name", "References"]);
         
-        // Set node edges to be keys in call graph
+        // Process each entry in the call graph
+        for (key, references) in &self.call_graph {
+            // Split the key into source file and function name
+            let parts: Vec<&str> = key.split("::").collect();
+            if parts.len() >= 2 {
+                let source_file = parts[0];
+                let function_name = parts[1];
+                
+                // Join references with commas
+                let references_str = references.join(", ");
+
+                // Add a row to the table
+                builder.push_record([source_file, function_name, &references_str]);
+            }
+        }
+        
+        // Build the table
+        let mut table = builder.build();
+        
+        // Apply styling
+        table.with(Style::ascii_rounded());
+        table.modify(Rows::first(), Color::FG_BLUE | Color::BOLD);
+        
+        // Print the table
+        println!("{}", table);
         Ok(())
     }
 

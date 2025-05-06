@@ -4,7 +4,6 @@ use owo_colors::OwoColorize;
 use fuzzy_matcher::FuzzyMatcher;
 use fuzzy_matcher::skim::SkimMatcherV2;
 
-
 pub fn search_file_for_keyword(keyword: String, filename: &PathBuf) -> Option<String> {
     let contents: String = fs::read_to_string(filename)
         .expect("Unable to read file.");
