@@ -51,6 +51,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
             analyzer.overlaps()?;
             analyzer.link_builder()?;
         }
+        // Commands::Tree(args) => {
+        //     pritnln!("Examining structure of codebase: {}", &args.paths)
+        // }
     }
     Ok(())
 }

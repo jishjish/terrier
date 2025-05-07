@@ -6,11 +6,10 @@ use std::path::PathBuf;
 use std::collections::{BTreeMap, HashMap};
 use tabled::{builder::Builder, settings::Style};
 use tabled::settings::{Color, object::Rows};
-
+use owo_colors::OwoColorize;
 
 // Internal imports for dir to exclude / supported file types
 use crate::utils:: { EXCLUDED_DIRECTORIES, SUPPORTED_TYPES};
-
 
 pub struct CodeLinkAnalyzer {
     pub file_contents: HashMap<String, (String, String)>,      // file path, (file type, file contents)
@@ -73,10 +72,8 @@ impl CodeLinkAnalyzer {
                 "rs" => Some(&rust_re),
                 "js" => Some(&javascript_re),
                 unsupported => {
-                    // assert!(false, "Unsupported file type: {}", unsupported);
                     eprintln!("Warning: Unsupported file type '{}', skipping file: {}", unsupported, key);
                     continue;
-                    // None
                 }
             };
 
