@@ -73,8 +73,10 @@ impl CodeLinkAnalyzer {
                 "rs" => Some(&rust_re),
                 "js" => Some(&javascript_re),
                 unsupported => {
-                    assert!(false, "Unsupported file type: {}", unsupported);
-                    None
+                    // assert!(false, "Unsupported file type: {}", unsupported);
+                    eprintln!("Warning: Unsupported file type '{}', skipping file: {}", unsupported, key);
+                    continue;
+                    // None
                 }
             };
 

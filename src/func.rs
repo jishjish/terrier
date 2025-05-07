@@ -36,6 +36,7 @@ pub fn func_identification(filename: &PathBuf) -> Option<String> {
             println!("{}", "Parsing Python file...".green());
             Some("def")
         },
+        // check for javascript
         "js" => {
             println!("{}", "Parsing Javascript file".green());
             Some("function")
