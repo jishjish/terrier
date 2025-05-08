@@ -2,27 +2,20 @@
 use clap::Parser;
 use owo_colors::OwoColorize;
 
-// mods
-mod args;
-mod utils;
-mod grep;
-mod func;
-mod link;
-
 // import Cli args from args.rs
-use args::Cli;
-use crate::args::Commands;
-use utils::get_extension_from_filename;
-
+use terrier::args::Cli;
+use terrier::args::Commands;
+// Utils (utils.rs)
+use terrier::utils::get_extension_from_filename;
 // Grep (grep.rs)
-use grep::search_file_for_keyword;
-
+use terrier::grep::search_file_for_keyword;
 // Func (func.rs)
-use func::func_identification;
-
+use terrier::func::func_identification;
 // Link (link.rs)
-use link::CodeLinkAnalyzer;
+use terrier::link::CodeLinkAnalyzer;
 
+
+/// Main function that orchestrates cli args
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let cli: Cli = Cli::parse();
     
