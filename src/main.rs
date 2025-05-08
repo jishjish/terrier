@@ -23,7 +23,6 @@ use func::func_identification;
 // Link (link.rs)
 use link::CodeLinkAnalyzer;
 
-
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let cli: Cli = Cli::parse();
     
